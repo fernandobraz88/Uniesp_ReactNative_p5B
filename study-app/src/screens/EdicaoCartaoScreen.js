@@ -60,7 +60,50 @@ const EdicaoCartaoScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>EdicaoCartaoScreen</Text>
+        <Text style={styles.label}>Título:</Text>
+        <TextInput
+            style={styles.input}
+            value={titulo}
+            onChangeText={setTitulo}
+            placeholder='t´tulo do Cartão...'
+        />
+        
+        <Text style={styles.label}>Notas:</Text>
+        <TextInput
+            style={styles.input}
+            value={notas}
+            onChangeText={setNotas}
+            placeholder='Insira uma descrição...'
+            multiline
+        />
+
+        <Text style={styles.label}>Data/Hora de Término</Text>
+        <Button 
+            tittle= "Escolher Data"
+            onPress={exibirDatapicker}
+            color='#32cd32'
+        />
+
+        <DateTimePickerModal
+            isVisible={mostraDataPicker}
+            mode='datetime'
+            onConfirm={confirmarData}
+            onCancel={ocultarDataPicker}
+        />
+
+        <Text style={styles.selectedDateLabel}>Data selecionada: {formatarData(dataTermino)}</Text>
+        <Text style={styles.label}>Status:</Text>
+        <Picker
+            selectedValue={status}
+            style={styles.input}
+            onValueChange={(itemValue) => setStatus(itemValue)}
+        >
+            <Picker.Item label='Backlog' value='backlog'/>
+            <Picker.Item label='Em Progresso' value='in_progress'/>
+            <Picker.Item label='Concluído' value='done'/>
+        </Picker>
+        <Button title='Salvar' onPress={salvar} color='#32cd32'/>
+
     </View>
   )
 }
