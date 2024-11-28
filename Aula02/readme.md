@@ -19,3 +19,6 @@ Nesta aula, foram desenvolvidos cinco exercícios focados na criação de layout
 ### Exercício 04: Layout Vertical com Espaço Igual entre Views
 - **Objetivo:** Criar um layout vertical onde três `<View>`s ocupam igualmente o espaço disponível na tela. Cada `<View>` deve ter uma cor de fundo diferente.
 - **Conceitos Utilizados:** Flexbox, distribuição de espaço igual, alinhamento vertical.
+
+### Resultados
+![App Screens](assets/Screens.png)

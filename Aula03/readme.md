@@ -22,3 +22,6 @@ Nesta aula, foram desenvolvidos três exercícios focados na implementação de 
   - Atualizar a HomeScreen para enviar parâmetros ao navegar para a DetailsScreen.
   - Exibir os parâmetros recebidos na DetailsScreen.
 - **Conceitos Utilizados:** Passagem de parâmetros entre telas, navegação com React Navigation.
+
+### Resultados
+![App Screens](assets/Screens.png)
