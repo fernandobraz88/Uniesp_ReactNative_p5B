@@ -19,3 +19,6 @@
 - **Objetivo:** Desenvolver um componente que exiba uma lista de itens dinâmicos a partir de um array de strings, utilizando o método `.map()`.
 - **Descrição:** O array fornecido gera elementos `<Text>` dinamicamente, representando cada item da lista.
 - **Conceitos Aplicados:** `.map()`, manipulação de arrays, renderização de listas.
+
+### Resultados
+![App Screens](assets/Screens.png)
