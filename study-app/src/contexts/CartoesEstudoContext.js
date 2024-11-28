@@ -4,7 +4,7 @@ import { createContext, useEffect, useState } from "react";
 
 const CartoesEstudoContext = createContext()
 
-export const CartoesEstudosProvider = ({children}) => {
+export const CartoesEstudoProvider = ({children}) => {
 
     const [cartoes, setCartoes] = useState([])
 
