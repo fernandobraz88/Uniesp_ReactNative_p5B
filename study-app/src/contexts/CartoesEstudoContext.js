@@ -1,48 +1,97 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createContext, useEffect, useState } from "react";
+// Importações necessárias
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, query, where } from 'firebase/firestore';
+import { db } from '../config/firebaseConfig'; // Configuração do banco de dados
+import { AuthContext } from './AuthContext'; // Contexto de autenticação para verificar o usuário logado
 
+// Criação do contexto para cartões de estudo
+const CartoesEstudoContext = createContext();
 
-const CartoesEstudoContext = createContext()
+/**
+ * Provedor que gerencia os cartões de estudo.
+ */
+export const ProvedorCartoesEstudo = ({ children }) => {
+    // Estado para armazenar a lista de cartões
+    const [cartoes, setCartoes] = useState([]);
 
-export const CartoesEstudoProvider = ({children}) => {
+    // Acesso ao contexto de autenticação
+    const { user } = useContext(AuthContext);
 
-    const [cartoes, setCartoes] = useState([])
-
+    /**
+     * Hook useEffect para carregar os cartões sempre que o usuário logado mudar.
+     */
     useEffect(() => {
-        carregarCartoes()
-    }, [])
-    
-    const carregarCartoes = async() => {
-        const cartoesArmazenados = await AsyncStorage.getItem('cartoes')
-        if(cartoesArmazenados) setCartoes(JSON.parse(cartoesArmazenados))
-    }
+        if (user) {
+            carregarCartoes();
+        }
+    }, [user]);
 
-    const adicionarCartao = async(cartao) => {
-        const novosCartoes = [...cartoes,{...cartao, id: Date.now()}]
-        setCartoes(novosCartoes)
-        await AsyncStorage.setItem('cartoes',JSON.stringify(novosCartoes))
-    }
+    /**
+     * Função para carregar os cartões do Firestore.
+     * - Busca apenas os cartões associados ao UID do usuário atual.
+     */
+    const carregarCartoes = async () => {
+        try {
+            const q = query(collection(db, 'cartoes'), where('uid', '==', user.uid));
+            const cartoesSnapshot = await getDocs(q); // Obtém os documentos do Firestore
+            const cartoesList = cartoesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setCartoes(cartoesList); // Atualiza o estado local com os cartões
+        } catch (error) {
+            console.error('Erro ao carregar cartões:', error);
+        }
+    };
 
-    const atualizarCartao = async(id, atualizacoes) => {
-        const novosCartoes = cartoes.map(cartao => cartao.id === id ? {
-            ...cartao, ...atualizacoes
-        } : cartao )
-        setCartoes(novosCartoes)
-        await AsyncStorage.setItem('cartoes', JSON.stringify(novosCartoes))
-    }
+    /**
+     * Função para adicionar um novo cartão ao Firestore.
+     */
+    const adicionarCartao = async (cartao) => {
+        try {
+            const novoCartao = { ...cartao, uid: user.uid }; // Adiciona o UID do usuário
+            const docRef = await addDoc(collection(db, 'cartoes'), novoCartao); // Salva no Firestore
+            setCartoes([...cartoes, { id: docRef.id, ...novoCartao }]); // Atualiza a lista local
+        } catch (error) {
+            console.error('Erro ao adicionar cartão:', error);
+        }
+    };
 
-    const excluirCartao = async(id) => {
-        const novosCartoes = cartoes.filter(cartao => cartao.id !== id)
-        setCartoes(novosCartoes)
-        await AsyncStorage.setItem('cartoes',JSON.stringify(novosCartoes))
-    }
-    
-    return(
-        <CartoesEstudoContext.Provider value={{cartoes, adicionarCartao, atualizarCartao, excluirCartao}}>
+    /**
+     * Função para atualizar um cartão existente.
+     */
+    const atualizarCartao = async (id, atualizacoes) => {
+        try {
+            const cartaoRef = doc(db, 'cartoes', id);
+            await updateDoc(cartaoRef, atualizacoes); // Atualiza o documento no Firestore
+            setCartoes(cartoes.map(cartao => (cartao.id === id ? { ...cartao, ...atualizacoes } : cartao)));
+        } catch (error) {
+            console.error('Erro ao atualizar cartão:', error);
+        }
+    };
+
+    /**
+     * Função para excluir um cartão do Firestore.
+     */
+    const excluirCartao = async (id) => {
+        try {
+            await deleteDoc(doc(db, 'cartoes', id)); // Remove do Firestore
+            setCartoes(cartoes.filter(cartao => cartao.id !== id)); // Remove localmente
+        } catch (error) {
+            console.error('Erro ao excluir cartão:', error);
+        }
+    };
+
+    /**
+     * O componente `Provider` fornece as seguintes funcionalidades:
+     * - `cartoes`: Lista de cartões carregados.
+     * - `adicionarCartao`: Função para criar novos cartões.
+     * - `atualizarCartao`: Função para editar cartões existentes.
+     * - `excluirCartao`: Função para deletar cartões.
+     */
+    return (
+        <CartoesEstudoContext.Provider value={{ cartoes, adicionarCartao, atualizarCartao, excluirCartao }}>
             {children}
         </CartoesEstudoContext.Provider>
-    )
-        
-}
+    );
+};
 
-export default CartoesEstudoContext
+// Exporta o contexto para ser usado nos componentes
+export default CartoesEstudoContext;
