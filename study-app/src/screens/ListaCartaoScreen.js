@@ -73,12 +73,12 @@ const ListaCartaoScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            {/* Botão para acessar tarefas a vencer */}
+            
             <TouchableOpacity style={styles.dueSoonButton} onPress={() => navigation.navigate('TarefasVencimentoProximo')}>
                 <Text style={styles.dueSoonButtonText}>Tarefas a Vencer: {cartoesVencimentoProximo.length}</Text>
             </TouchableOpacity>
 
-            {/* Lista de cartões em progresso */}
+           
             <Text style={styles.sectionTitle}>Em Progresso</Text>
             <FlatList
                 data={cartoesAgrupadosPorStatus('in_progress')}
@@ -90,7 +90,7 @@ const ListaCartaoScreen = ({ navigation }) => {
 
             <View style={styles.divider} />
 
-            {/* Lista de cartões concluídos */}
+            
             <Text style={styles.sectionTitle}>Concluído</Text>
             <FlatList
                 data={cartoesAgrupadosPorStatus('done')}
@@ -102,7 +102,7 @@ const ListaCartaoScreen = ({ navigation }) => {
 
             <View style={styles.divider} />
 
-            {/* Lista de cartões em backlog */}
+            
             <Text style={styles.sectionTitle}>Backlog</Text>
             <FlatList
                 data={cartoesAgrupadosPorStatus('backlog')}
@@ -112,7 +112,7 @@ const ListaCartaoScreen = ({ navigation }) => {
                 showsHorizontalScrollIndicator={false}
             />
 
-            {/* Botão para adicionar um novo cartão */}
+            
             <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('EdicaoCartao')}>
                 <MaterialIcons name="add" size={24} color="#ffffff" />
                 <Text style={styles.addButtonText}>Adicionar Novo Cartão</Text>
@@ -158,14 +158,14 @@ const styles = StyleSheet.create({
         maxWidth: 170,
     },
     cardBacklog: {
-        backgroundColor: '#f5f5f5', // Cinza claro para backlog
+        backgroundColor: '#f5f5f5', 
         borderColor: '#ddd',
     },
     cardDone: {
-        borderColor: '#32cd32', // Verde para concluído
+        borderColor: '#32cd32', 
     },
     cardInProgress: {
-        borderColor: '#007bff', // Azul para em progresso
+        borderColor: '#007bff', 
     },
     cardTitle: {
         fontSize: 14,
