@@ -97,3 +97,6 @@ Execute o projeto com o comando:
 npm start
 ```
 * Um QR Code será gerado. Use o aplicativo Expo Go para escanear e testar no celular.
+
+### 7. Resultados
+![App Screens](assets/Screens.png)
