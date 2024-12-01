@@ -14,7 +14,7 @@ O **Study-App** é uma aplicação desenvolvida com **React Native** e **Firebas
 - **Firebase:** Plataforma usada para autenticação e banco de dados.
 - **React Navigation:** Biblioteca para navegação entre páginas.
 - **Expo:** Ferramenta que simplifica o desenvolvimento e execução de aplicativos React Native.
-- **Modal Datetime Picker** Seletor de data para cartões e tarefas.
+- **Modal Datetime Picker:** Seletor de data para cartões e tarefas.
 
 ## Funcionalidades Principais
 
